@@ -104,6 +104,25 @@ class MovieTableViewController: UITableViewController {
         }
     }
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // 1. check sender for the cell that was tapped
+        if let tappedMovieCell: MovieTableViewCell = sender as? MovieTableViewCell {
+         
+            // 2. check for the right storyboard segue
+            if segue.identifier == "MovieDetailViewSegue" {
+                
+                // 3. create an instance of our VC, and push to it
+                if let dtvc: MovieDetailViewController =  segue.destination as? MovieDetailViewController {
+                    segue.perform()
+                }
+                
+            }
+
+        }
+    }
+    
     // MARK: - Utility
     func by(_ c: Century) -> [Movie]? {
         let filter: (Movie) -> Bool
