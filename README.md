@@ -1,46 +1,29 @@
 # C4Q Movie Reel 
 
-### (AC3.2-Tableviews_Part_3: **Segues and Protocols Basics**)
+### (AC3.2-Tableviews_Part_3: **Tableview Segues**)
 
 ---
 
 ### Time to Reel it In
 
-Reel good took our latest protocol and presented it to their board of investors as the cornerstone of their mobile initiative. The extra work we put behind the design of the app must have really sold it, because Reel Good now needs one more set of changes before they take the app into beta. 
+Reel Good took our latest prototype and presented it to their board of investors as the cornerstone of their mobile initiative. The extra work we put behind the design of the app must have really sold it, because Reel Good now needs one more set of changes before they take the app into beta. 
 
-For the next [MVP](https://www.quora.com/What-is-a-minimum-viable-product/answer/Suren-Samarchyan?srid=dpgi), Reel Good needs these next things:
-
-1. Tapping on a movie should bring up a full screen view with the full details of that movie
-2. They want a search bar to be able to filter out the movies in the table view
-3. Somewhere in the app there should be an "About" section (they've left it up to us to decide)
-
-At our sprint planning meeting, our engineering team had to cut Reel Good short at this point because they had many, many more featuers. We had to remind Reel Good that while these are "only three" things, they represent a significant development challenge and time commitment. As is common in the field, being able to translate features into development time is going to be a critical skill that comes with time and experience. But this intangible skill is what will set you apart from a careless developer and a skillful one. 
+For the next [MVP](https://www.quora.com/What-is-a-minimum-viable-product/answer/Suren-Samarchyan?srid=dpgi), Reel Good wants to be able to tap on the movie cell to display full details of the movie on a different screen. 
 
 After the meeting with Reel Good, we sat down with our engineering team and sketched out the necessary requirements of this next task and broke them down:
 
-1. We're going to have to implement addition protocol methods in `UITableviewDelegate` to be able to handle tap detection
-2. We have to create a new custom view controller (and views in our storyboard) to present a full screen version of the movie data
+1. We're going to have to implement addition `UITableviewDelegate` methods to be able to handle tap detection
+2. We have to create a new custom view controller to present a full screen version of the movie data
   3. We need to make sure that navigation works to go to and from one of these view controllers.
-  4. The proper movie data has to be transferred, so we need to do some data handling
-5. Adding in a search bar means, not only adding new storyboard elements to our tableview, it also means implementing a number of new functions in order to support "live" search filtering
-  6. Less obvious, we'll need to think of how to redesign our models to make this search easier. 
-7. And "About" screen means we'll potentially need a few things:
-  8. A new `UIView` and/or `UIViewController` to present the info
-  9. Planning what action or button will display this view
-  10. Deciding how this view will be dismissed
+  4. The proper movie data has to be transferred from one view controller to the next, so we need to do some data handling
   
-So you can see, translatting features into actual programming work is very important in the initial stages of development to get an understanding of truly everything that needs to be done. And even then, there absolutely will be unforseen problems that you will encounter. But that's just part of the fun of programming :)
+A large part of development is being able to translate feature requests into actual programming work. Taking some time to plan out a course of action before starting to code will likely save you some time in the end. Even then, there absolutely will be unforseen problems that you will encounter. But that's just part of the fun of programming.
 
 ---
 ### Goals
-1. Implement a `UISearchBar` along with it's delegate methods defined in `UISearchBarDelegate`
-2. Create a new custom `UIViewController` to display a single `Movie` object's data
-3. Understand segues in storyboard to transition between view controllers
-4. Understand the `Equatable` and `Comparable` protocols and implement them in our `Movie` model
-5. Create a basic view animation to display our "About" page
-6. Better understand the role of protocols in Swift.
-
-By the end of this lesson, you will have a fully-functioning, basic data app with search functionality that will look great on any iPhone screen. 
+1. Create a new custom `UIViewController` to display a single `Movie` object's data
+2. Understand segues in storyboard to transition between view controllers
+3. Better understanding of the delegate pattern in programming.
 
 ---
 
@@ -49,10 +32,6 @@ By the end of this lesson, you will have a fully-functioning, basic data app wit
  2. [Configuring a Segue in Storyboard - Apple](http://help.apple.com/xcode/mac/8.0/#/deve5fc2eb19)
  3. [Using Segues (lots of great info here)](https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/UsingSegues.html)
  4. [Navigation Controller Implementation - tuts+ (helpful reference and example)](https://code.tutsplus.com/tutorials/ios-from-scratch-with-swift-navigation-controllers-and-view-controller-hierarchies--cms-25462)
- 2. (Reading on UISearchBar)
- 3. (Reading on Equatable/Comparable)
- 4. (Reading on Protocols)
- 5. (Reading on basic animations)
   
 ---
 
@@ -71,29 +50,35 @@ By the end of this lesson, you will have a fully-functioning, basic data app wit
   - _Before adding these constraints, make sure the checkmark box for "Constrain to margins" is selected_
   - Switch the image view's `Content Mode` to `Aspect Fit`
 5. Drag in 5 `UILabel`s below the `UIImageView` in a vertical row
-  - Label them (in order): `Genre`, `Cast`, `Location`, `Summary` and `Summary Text`
+  - Label them (in order): `Genre`, `Location`, `Summary` and `Summary Text`
   - Set their fonts to `Roboto Regular - 17pt`, except for `Summary Text` which will be `Roboto-Light - 14pt`
   - Set the number of lines for `Summary Text` to 0
 6. Select **all** of the `UILabel`s at once, but holding down the Command (⌘) Key while clicking on them
   - Select *Pin* and set it to **8pt margins**, also making sure that the checkmark for "Constrain to margins" is selected
   - Set the *Vertical Content Hugging Priority* to 1000 for all labels except `Summary Text`. Instead, set the *Vertical Compression Resistance* of `Summary Text` to 1000
   - Your view controller should resemble: (add screen shot)
+  
+Being able to set constraints in this batching form is one of the nice advantages of using storyboards. 
 
 #### Storyboard linking
 1. Add a new file named `MovieDetailViewController` that subclasses `UIViewController` and place it in the correct folder and Xcode group
 2. In `Main.storyboard` change the custom class of the view controller we just created to be `MovieDetailViewController`
 3. Create outlets for each of the labels and the imageView. Name them:
-  - `moviePosterImageView`, `genreLabel`, `castLabel`, `locationLabel`, `summaryLabel`, and `summaryFullTextLabel`
+  - `moviePosterImageView`, `genreLabel`, `locationLabel`, `summaryLabel`, and `summaryFullTextLabel`
 4. Additionally, give `MovieDetailViewController` an instance variable of type `Movie`:
   - `internal var selectedMovie: Movie!`
-  - You'll see in a bit why we'll need this
+  - This property will hold a reference to the `Movie` from the cell that was tapped.
 
 #### Preparing for Segue
-A `UINavigationController` is unique in that it manages its own navigation stack. A navigation stack is a hierarchy of view controllers. You can think of each view controller being a card in a stack of cards and when you **push** a view controller onto the stack, you're putting a new card on top of the _stack_ of cards. When you **pop** a view controller, you're taking a card off the top of the _stack_. It important to know that all view controllers currently on the stack can be accessed through the navigation controller, and thus exist in memory. 
+A `UINavigationController` is unique in that it manages its a _navigation stack_, which is a hierarchy of view controllers. 
 
-The `prepare(for:sender:)` method is where we get things ready for displaying a new view controller that has been set up with a segue object in storyboard. For right now, we're just going to make sure that the segue is working in general and that we *push* to our `MovieDetailViewController` and then are able to *pop* back to our `MovieTableViewController`.
+You can think of each view controller being a card in a stack of cards.  When you **push** a view controller onto the stack, you're putting a new card on top of the _stack_ of cards. When you **pop** a view controller, you're taking a card off the top of the _stack_. 
 
-As mentioned in the documentation for [`prepare(for:sender:)`](https://developer.apple.com/reference/appkit/nssegueperforming/1409583-performsegue), the `sender` parameter refers to the object that has requested the segue. In our case, the sender is expected to be a `MovieTableviewCell`. But because the `sender` could be `Any?`, we should do a check to confirm our assumptions. Moreover, we'll need the cell to determine which movie cell was tapped.
+> It's important to know that all view controllers currently on the stack can be accessed through the navigation controller, and thus exist in memory. 
+
+The `prepare(for:sender:)` method is where we get things ready for displaying a new view controller that has been set up with a segue object in storyboard.
+
+As mentioned in the documentation for [`prepare(for:sender:)`](https://developer.apple.com/reference/appkit/nssegueperforming/1409583-performsegue), the `sender` parameter refers to the object that has requested the segue. In our case, the `sender` is expected to be a `MovieTableviewCell`. But because the `sender` is defined as being `Any?`, we should do a check to confirm our assumptions. Moreover, we'll need the cell to determine which movie cell was tapped.
 
 ```swift
   // 1. check sender for the cell that was tapped
@@ -119,35 +104,78 @@ While generally you should avoid force unwrapping, in this instance because we'r
 
 `let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController`
 
-Ok, so we have the tapped cell (`sender`) and we have the instance of `MovieDetailViewController` (`segue.destination`), but how do we get the `Movie` object that corresponds to the cell we selected? We _could_ get the `movieTitleLabel.text` property, then iterrate over our entire `movieData` array, locating the Movie object with the same title. Though, another solution is to get the index of the cell, and using that, derive the movie by the same set of functions we used in `cellForRow` to separate out our data into different sections. Both would work, but we're going to use the latter:
+Ok, so we have the tapped cell (`sender`) and we have the instance of `MovieDetailViewController` (`segue.destination`), but how do we get the `Movie` object that corresponds to the cell we selected? 
+
+We already wrote a piece of code in `cellForRow` that arranged our `movieData` by genre, but that required having the current `indexPath`. Fortunately, there's `indexPath(for:)` function that we can call on our table view to get that same info. Using that function, along with our code from `cellForRow` we have:
 
 ```swift
-let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController
+          // 1. check sender for the cell that was tapped
+        if let tappedMovieCell: MovieTableViewCell = sender as? MovieTableViewCell {
+         
+            // 2. check for the right storyboard segue
+            if segue.identifier == "MovieDetailViewSegue" {
+                
+                // 3. get reference to the destination view controller
+                let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController
+                
+                // 4. get our cell's indexPath
                 let cellIndexPath: IndexPath = self.tableView.indexPath(for: tappedMovieCell)!
+                
+                // 5. get our cell's Movie
                 guard let genre = Genre.init(rawValue: cellIndexPath.section),
-                    let data = byGenre(genre) else {
-                        return
+                  let data = byGenre(genre) else {
+                  return
                 }
                 
+                // 6. set the destionation's selectedMovie property
                 let selectedMovie: Movie = data[cellIndexPath.row]
                 movieDetailViewController.selectedMovie = selectedMovie
-                
-                movieDetailViewController.moviePosterImageView.image = UIImage(named: selectedMovie.poster)
-                movieDetailViewController.genreLabel.text = selectedMovie.genre
-                movieDetailViewController.castLabel.text = "Cast: "
-                movieDetailViewController.locationLabel.text = selectedMovie.locations.joined(separator: ", ")
-                movieDetailViewController.summaryFullTextLabel.text = selectedMovie.summary
-                // we'll need to return to our cast of Actors in a moment
-                
+            }
+        }
+```
+
+Now that the destination `MovieDetailViewController` has its `Movie` object, let's populate the labels:
+
+```swift
+        self.moviePosterImageView.image = UIImage(named: movie.poster)
+        self.genreLabel.text = "Genre: " + movie.genre.capitalized
+        self.locationLabel.text = "Locations: " + movie.locations.joined(separator: ", ")
+        self.summaryFullTextLabel.text = movie.summary
 ```
 
 Go ahead and run the poject at this point to see if the data gets passed along properly...
 
 `fatal error: unexpectedly found nil while unwrapping an Optional value`
 
-> Discuss & Debug: Why are we getting force unwrapping errors? 
+> **Discuss & Debug**:
+Why are we getting force unwrapping errors? 
 
 #### Updating `MovieDetailViewController` with a `Movie`
+
+Let's move our code into `MovieDetailViewController` in a new function, `updateViews(for:)`:
+
+```swift
+    internal func updateViews(for movie: Movie) {
+        self.moviePosterImageView.image = UIImage(named: movie.poster)!
+        self.genreLabel.text = "Genre: " + movie.genre.capitalized
+        self.locationLabel.text = "Locations: " + movie.locations.joined(separator: ", ")
+        self.summaryFullTextLabel.text = movie.summary
+    }
+```
+
+And lastly, let's call it in our `viewDidLoad`
+
+```swift
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.updateViews(for: self.selectedMovie)
+    }
+```
+
+And re-run the project now. You should see (screenshot)
+
+---
 
 
 
