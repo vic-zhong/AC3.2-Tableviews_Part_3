@@ -45,10 +45,109 @@ By the end of this lesson, you will have a fully-functioning, basic data app wit
 ---
 
 ### Readings
-
-
+ 1. [General Reference on Xcode (very useful)](http://help.apple.com/xcode/mac/8.0)
+ 2. [Configuring a Segue in Storyboard - Apple](http://help.apple.com/xcode/mac/8.0/#/deve5fc2eb19)
+ 3. [Using Segues (lots of great info here)](https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/UsingSegues.html)
+ 4. [Navigation Controller Implementation - tuts+ (helpful reference and example)](https://code.tutsplus.com/tutorials/ios-from-scratch-with-swift-navigation-controllers-and-view-controller-hierarchies--cms-25462)
+ 2. (Reading on UISearchBar)
+ 3. (Reading on Equatable/Comparable)
+ 4. (Reading on Protocols)
+ 5. (Reading on basic animations)
+  
 ---
 
+### 1. Adding a new `UIViewController` to Display a `Movie`
+
+#### Storyboard Changes **(Use iPhone 6s for your simulation)**
+1. Drag in a `UIViewController` into `Main.storyboard` from the *Objects Library* in the *Utilities Pane* and place it next to the `MovieTableViewController`
+2. Select the prototype cell (make sure you have the actual `MovieTableViewCell` selected) and Control-Drag to the new `UIViewController`
+3. On the outlet menu that pops up, select "Selection Segue > Show"
+  - Note: The "Accessory Selection" is that action to perform when adding an "accessory view." An example of an accessory view is the `>` (called a "chevron") you see all the way to the right on a cell in the Mail or Messages app on an iPhone. 
+  - The "Selection" type of segue refers to the action to take when the cell itself is tapped/selected.
+4. Select the segue object in storyboard (the -> arrow), and in the *Attribute Inspector*, set it's identifier to `MovieDetailViewSegue`
+5. Drag in a `UIImageView` into the view controller, giving it the following attributes:
+  - `8pt` margins at the top, left, and right
+  - A height of `240pt`
+  - _Before adding these constraints, make sure the checkmark box for "Constrain to margins" is selected_
+  - Switch the image view's `Content Mode` to `Aspect Fit`
+5. Drag in 5 `UILabel`s below the `UIImageView` in a vertical row
+  - Label them (in order): `Genre`, `Cast`, `Location`, `Summary` and `Summary Text`
+  - Set their fonts to `Roboto Regular - 17pt`, except for `Summary Text` which will be `Roboto-Light - 14pt`
+  - Set the number of lines for `Summary Text` to 0
+6. Select **all** of the `UILabel`s at once, but holding down the Command (⌘) Key while clicking on them
+  - Select *Pin* and set it to **8pt margins**, also making sure that the checkmark for "Constrain to margins" is selected
+  - Set the *Vertical Content Hugging Priority* to 1000 for all labels except `Summary Text`. Instead, set the *Vertical Compression Resistance* of `Summary Text` to 1000
+  - Your view controller should resemble: (add screen shot)
+
+#### Storyboard linking
+1. Add a new file named `MovieDetailViewController` that subclasses `UIViewController` and place it in the correct folder and Xcode group
+2. In `Main.storyboard` change the custom class of the view controller we just created to be `MovieDetailViewController`
+3. Create outlets for each of the labels and the imageView. Name them:
+  - `moviePosterImageView`, `genreLabel`, `castLabel`, `locationLabel`, `summaryLabel`, and `summaryFullTextLabel`
+4. Additionally, give `MovieDetailViewController` an instance variable of type `Movie`:
+  - `internal var selectedMovie: Movie!`
+  - You'll see in a bit why we'll need this
+
+#### Preparing for Segue
+A `UINavigationController` is unique in that it manages its own navigation stack. A navigation stack is a hierarchy of view controllers. You can think of each view controller being a card in a stack of cards and when you **push** a view controller onto the stack, you're putting a new card on top of the _stack_ of cards. When you **pop** a view controller, you're taking a card off the top of the _stack_. It important to know that all view controllers currently on the stack can be accessed through the navigation controller, and thus exist in memory. 
+
+The `prepare(for:sender:)` method is where we get things ready for displaying a new view controller that has been set up with a segue object in storyboard. For right now, we're just going to make sure that the segue is working in general and that we *push* to our `MovieDetailViewController` and then are able to *pop* back to our `MovieTableViewController`.
+
+As mentioned in the documentation for [`prepare(for:sender:)`](https://developer.apple.com/reference/appkit/nssegueperforming/1409583-performsegue), the `sender` parameter refers to the object that has requested the segue. In our case, the sender is expected to be a `MovieTableviewCell`. But because the `sender` could be `Any?`, we should do a check to confirm our assumptions. Moreover, we'll need the cell to determine which movie cell was tapped.
+
+```swift
+  // 1. check sender for the cell that was tapped
+        if let tappedMovieCell: MovieTableViewCell = sender as? MovieTableViewCell {
+        
+        }
+```
+
+The `segue` object is an instance of `NSStoryboardSegue`, which has an instance property of `indentifier` that refers to the identifier string we gave to the segue earlier in `Main.storyboard` (we used `MovieDetailViewSegue`). In order to make sure that we have the correct segue (a storyboard can have many, many segues), we need to check that the identifier matches one that we expect:
+
+```swift
+          // 1. check sender for the cell that was tapped
+        if let tappedMovieCell: MovieTableViewCell = sender as? MovieTableViewCell {
+         
+            // 2. check for the right storyboard segue
+            if segue.identifier == "MovieDetailViewSegue" {
+                
+            }
+        }
+```
+
+While generally you should avoid force unwrapping, in this instance because we're certain of both the sender and the storyboard segue we can say with some certainty that the `segue.destination` is going to be a `MovieDetailViewController`:
+
+`let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController`
+
+Ok, so we have the tapped cell (`sender`) and we have the instance of `MovieDetailViewController` (`segue.destination`), but how do we get the `Movie` object that corresponds to the cell we selected? We _could_ get the `movieTitleLabel.text` property, then iterrate over our entire `movieData` array, locating the Movie object with the same title. Though, another solution is to get the index of the cell, and using that, derive the movie by the same set of functions we used in `cellForRow` to separate out our data into different sections. Both would work, but we're going to use the latter:
+
+```swift
+let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController
+                let cellIndexPath: IndexPath = self.tableView.indexPath(for: tappedMovieCell)!
+                guard let genre = Genre.init(rawValue: cellIndexPath.section),
+                    let data = byGenre(genre) else {
+                        return
+                }
+                
+                let selectedMovie: Movie = data[cellIndexPath.row]
+                movieDetailViewController.selectedMovie = selectedMovie
+                
+                movieDetailViewController.moviePosterImageView.image = UIImage(named: selectedMovie.poster)
+                movieDetailViewController.genreLabel.text = selectedMovie.genre
+                movieDetailViewController.castLabel.text = "Cast: "
+                movieDetailViewController.locationLabel.text = selectedMovie.locations.joined(separator: ", ")
+                movieDetailViewController.summaryFullTextLabel.text = selectedMovie.summary
+                // we'll need to return to our cast of Actors in a moment
+                
+```
+
+Go ahead and run the poject at this point to see if the data gets passed along properly...
+
+`fatal error: unexpectedly found nil while unwrapping an Optional value`
+
+> Discuss & Debug: Why are we getting force unwrapping errors? 
+
+#### Updating `MovieDetailViewController` with a `Movie`
 
 
 

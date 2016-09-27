@@ -33,9 +33,9 @@ class MovieDetailViewController: UIViewController {
     
     internal func updateViews(for movie: Movie) {
         self.moviePosterImageView.image = UIImage(named: movie.poster)!
-        self.genreLabel.text = movie.genre
+        self.genreLabel.text = "Genre: " + movie.genre.capitalized
         self.castLabel.text = "Cast: "
-        self.locationLabel.text = movie.locations.joined(separator: ", ")
+        self.locationLabel.text = "Locations: " + movie.locations.joined(separator: ", ")
         self.summaryFullTextLabel.text = movie.summary
     }
 

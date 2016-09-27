@@ -127,8 +127,9 @@ class MovieTableViewController: UITableViewController {
                 
                 // 4. Why can't we just call updateViews(for:) here? 
                 //    - well, because this function is called just *before* the segue actually happens, so the instance
-                //      of MovieDetailViewController has not yet had it's UI elements set! 
-                movieDetailViewController.selectedMovie = data[cellIndexPath.row]
+                //      of MovieDetailViewController has not yet had it's UI elements set!
+                let selectedMovie: Movie = data[cellIndexPath.row]
+                movieDetailViewController.selectedMovie = selectedMovie
             }
 
         }
