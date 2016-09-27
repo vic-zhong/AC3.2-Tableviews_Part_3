@@ -113,10 +113,7 @@ class MovieTableViewController: UITableViewController {
             // 2. check for the right storyboard segue
             if segue.identifier == "MovieDetailViewSegue" {
                 
-                // 3. create an instance of our VC, and push to it
-                if let dtvc: MovieDetailViewController =  segue.destination as? MovieDetailViewController {
-                    segue.perform()
-                }
+                // and that's all; storyboard handles the rest! there's already an instance of MovieDetailViewControler
                 
             }
 
