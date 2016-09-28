@@ -113,25 +113,28 @@ class MovieTableViewController: UITableViewController {
             // 2. check for the right storyboard segue
             if segue.identifier == "MovieDetailViewSegue" {
                 
-                // 3. ...and that's all; storyboard handles the rest! there's already an instance of MovieDetailViewControler
-                // But in order to update the view controller, we need to:
-                //    - find the indexPath of the selected cell
-                //    - get the movie displayed on that cell (a little trickier since we're sorting by genre
-                //    - set the selectedMovie property of the view controller to our movie
+                // 3. get reference to the destination view controller
                 let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController
+                
+                // 4. get our cell's indexPath
                 let cellIndexPath: IndexPath = self.tableView.indexPath(for: tappedMovieCell)!
+                
+                // 5. get our cell's Movie
                 guard let genre = Genre.init(rawValue: cellIndexPath.section),
                     let data = byGenre(genre) else {
                         return
                 }
                 
-                // 4. Why can't we just call updateViews(for:) here? 
-                //    - well, because this function is called just *before* the segue actually happens, so the instance
-                //      of MovieDetailViewController has not yet had it's UI elements set!
+                // 6. set the destination's selectedMovie property
                 let selectedMovie: Movie = data[cellIndexPath.row]
                 movieDetailViewController.selectedMovie = selectedMovie
+                
+                // 7. update our labels & image
+//                movieDetailViewController.moviePosterImageView.image = UIImage(named: selectedMovie.poster)
+//                movieDetailViewController.genreLabel.text = "Genre: " + selectedMovie.genre.capitalized
+//                movieDetailViewController.locationLabel.text = "Locations: " + selectedMovie.locations.joined(separator: ", ")
+//                movieDetailViewController.summaryFullTextLabel.text = selectedMovie.summary
             }
-
         }
     }
     
