@@ -17,13 +17,13 @@
         <!--Movie Table View Controller-->
         <scene sceneID="cyG-Yu-0vp">
             <objects>
-                <tableViewController id="yet-gM-qc3" customClass="MovieTableViewController" customModule="Tableviews_Part_2" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="yet-gM-qc3" customClass="MovieTableViewController" customModule="Tableviews_Part_3" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="USi-Ea-1tN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieTableViewCell" rowHeight="200" id="NQa-gd-usH" customClass="MovieTableViewCell" customModule="Tableviews_Part_2" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieTableViewCell" rowHeight="200" id="NQa-gd-usH" customClass="MovieTableViewCell" customModule="Tableviews_Part_3" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="375" height="200"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NQa-gd-usH" id="I3u-H0-aWI">
@@ -84,7 +84,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="KuV-Iy-6GA" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="1jd-vJ-snn">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1jd-vJ-snn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
