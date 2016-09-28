@@ -177,6 +177,27 @@ And re-run the project now. You should see (screenshot)
 
 ---
 
+### 2. Exercise
+
+You may have noticed that we didn't add in a label for `Movie.cast`.
+
+What we'd like to do is be able to present a view controller of just the `Actor`s for each movie when you tap on an accessory view. 
+
+To acheive that goal, here are a few pointers:
+1. Create a new `UIViewController` sublcass called `MovieCastDetailViewController`
+2. Drag a `UIViewController` into storyboard, and change its custom class to `MovieCastDetailViewController`
+3. Add two labels to this view with the following details (screen shot):
+  - `castTitleLabel`:
+    - `Roboto - Bold, 24pt`, Number of Lines = 1, `8pt` margins to top, left, right. `Vertical Content Hugging - 1000`
+  - `castListLabel`:
+    - `Roboto - Regular, 18pt`, Number of Lines = 0, `8pt` top margin to `castTitleLabel`, `24pt` left margin, `8pt` right margin. 
+3. Create a segue between `MovieTableviewCell` and `MovieCastDetailViewController`, though instead of chosing a segue of type "Selection Segue" you'll be using "Accessory Action". Give the segue and identifier of `MovieCastDetailSegue`
+  - Creating the segue of type "Accessory Action" should automatically add a "Disclosure Indicator" accesory view to the `MovieTableviewCell`, but switch it to "Detail"
+5. Update your code in `MovieTableViewController.prepare(for:)` to recognize the new segue identifier
+6. Populate your `castListLabel` with the `Actor` names so that your final product looks like: (screen shot)
 
 
-
+#### Other Optional Exercises
+1. Update the title of the `UINavigationController` of `MovieDetailViewController` to have the name of the `Movie` being viewed
+2. Same as the above, but for the `MovieCastDetailViewController`
+3. You may have noticed that some of the labels get hidden when viewing the project on an iPhone 5s. Swap the `summaryText` `UILabel` with a `UITextField` to allow for this portion of the text to be scrollable.

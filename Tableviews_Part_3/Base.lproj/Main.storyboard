@@ -7,6 +7,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Roboto-Bold.ttf">
+            <string>Roboto-Bold</string>
+        </array>
         <array key="Roboto-Light.ttf">
             <string>Roboto-Light</string>
         </array>
@@ -24,11 +27,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MovieTableViewCell" rowHeight="200" id="NQa-gd-usH" customClass="MovieTableViewCell" customModule="Tableviews_Part_3" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="MovieTableViewCell" rowHeight="200" id="NQa-gd-usH" customClass="MovieTableViewCell" customModule="Tableviews_Part_3" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="375" height="200"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NQa-gd-usH" id="I3u-H0-aWI">
-                                    <frame key="frameInset" width="342" height="199"/>
+                                    <frame key="frameInset" width="328" height="199"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aMM-c5-abE">
@@ -67,6 +70,7 @@
                                     <outlet property="movieSummaryLabel" destination="90p-Ty-yn0" id="kra-Rl-R96"/>
                                     <outlet property="movieTitleLabel" destination="FS7-pK-VSu" id="x8I-uc-4Yv"/>
                                     <segue destination="mxd-d9-FzN" kind="show" identifier="MovieDetailViewSegue" id="chr-TJ-lPi"/>
+                                    <segue destination="dgA-bD-izg" kind="show" identifier="MovieCastDetailSegue" trigger="accessoryAction" id="Tdy-EK-DJE"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -80,6 +84,47 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RHw-bd-Gmq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="744.79999999999995" y="64.31784107946028"/>
+        </scene>
+        <!--Movie Cast Detail View Controller-->
+        <scene sceneID="n8K-gN-C4w">
+            <objects>
+                <viewController id="dgA-bD-izg" customClass="MovieCastDetailViewController" customModule="Tableviews_Part_3" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wz5-JN-doE"/>
+                        <viewControllerLayoutGuide type="bottom" id="HVo-Hv-PUo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="A7M-KN-TwW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="Cast List:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EJX-5U-39z">
+                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Actor List" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thb-dU-r6b">
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="thb-dU-r6b" secondAttribute="trailing" constant="8" id="4gE-yg-oXk"/>
+                            <constraint firstItem="EJX-5U-39z" firstAttribute="trailing" secondItem="A7M-KN-TwW" secondAttribute="trailingMargin" constant="8" id="Jhf-B7-cSo"/>
+                            <constraint firstItem="EJX-5U-39z" firstAttribute="top" secondItem="wz5-JN-doE" secondAttribute="bottom" constant="8" id="RFC-Gc-yHT"/>
+                            <constraint firstItem="thb-dU-r6b" firstAttribute="top" secondItem="EJX-5U-39z" secondAttribute="bottom" constant="8" id="heA-ak-g3N"/>
+                            <constraint firstItem="EJX-5U-39z" firstAttribute="leading" secondItem="A7M-KN-TwW" secondAttribute="leadingMargin" constant="8" id="pXA-Ua-Kx9"/>
+                            <constraint firstItem="thb-dU-r6b" firstAttribute="leading" secondItem="A7M-KN-TwW" secondAttribute="leadingMargin" constant="24" id="tXy-RS-hNc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="castListLabel" destination="thb-dU-r6b" id="dAV-3e-J4W"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y8g-vn-GTy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1517.5999999999999" y="-606.74662668665667"/>
         </scene>
         <!--Movie Detail View Controller-->
         <scene sceneID="FGE-JX-HxK">

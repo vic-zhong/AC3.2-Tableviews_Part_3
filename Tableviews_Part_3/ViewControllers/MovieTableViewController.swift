@@ -112,27 +112,39 @@ class MovieTableViewController: UITableViewController {
          
             // 2. check for the right storyboard segue
             if segue.identifier == "MovieDetailViewSegue" {
-                
-                // 3. ...and that's all; storyboard handles the rest! there's already an instance of MovieDetailViewControler
-                // But in order to update the view controller, we need to:
-                //    - find the indexPath of the selected cell
-                //    - get the movie displayed on that cell (a little trickier since we're sorting by genre
-                //    - set the selectedMovie property of the view controller to our movie
                 let movieDetailViewController: MovieDetailViewController = segue.destination as! MovieDetailViewController
+                
                 let cellIndexPath: IndexPath = self.tableView.indexPath(for: tappedMovieCell)!
+                
                 guard let genre = Genre.init(rawValue: cellIndexPath.section),
                     let data = byGenre(genre) else {
                         return
                 }
                 
-                // 4. Why can't we just call updateViews(for:) here? 
-                //    - well, because this function is called just *before* the segue actually happens, so the instance
-                //      of MovieDetailViewController has not yet had it's UI elements set!
                 let selectedMovie: Movie = data[cellIndexPath.row]
                 movieDetailViewController.selectedMovie = selectedMovie
             }
+            
+            // 2. check for the right storyboard segue
+            if segue.identifier == "MovieCastDetailSegue" {
+                let movieCastDetailViewController: MovieCastDetailViewController = segue.destination as! MovieCastDetailViewController
+                
+                let cellIndexPath: IndexPath = self.tableView.indexPath(for: tappedMovieCell)!
+                
+                guard let genre = Genre.init(rawValue: cellIndexPath.section),
+                    let data = byGenre(genre) else {
+                        return
+                }
+                
+                let selectedMovie: Movie = data[cellIndexPath.row]
+                movieCastDetailViewController.selectedActors = selectedMovie.cast
+            }
 
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
     }
     
     // MARK: - Utility
