@@ -171,6 +171,7 @@ class MovieTableViewController: UITableViewController {
 				movieDetailViewController.selectedMovie = selectedMovie
 			}
 			
+			// Updating code to recognize the new segue identifier
 			if segue.identifier == "MovieCastDetailSegue" {
 				let movieCastDetailViewController: MovieCastDetailViewController = segue.destination as! MovieCastDetailViewController
 				let cellIndexPath: IndexPath = self.tableView.indexPath(for: tappedMovieCell)!
