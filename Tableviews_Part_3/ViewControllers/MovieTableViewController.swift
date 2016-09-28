@@ -143,9 +143,6 @@ class MovieTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        
-    }
     
     // MARK: - Utility
     func by(_ c: Century) -> [Movie]? {
