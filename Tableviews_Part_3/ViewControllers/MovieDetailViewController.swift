@@ -16,7 +16,7 @@ class MovieDetailViewController: UIViewController {
 	@IBOutlet weak var genreLabel: UILabel!
 	@IBOutlet weak var locationLabel: UILabel!
 	@IBOutlet weak var summaryLabel: UILabel!
-	@IBOutlet weak var summaryFullTextLabel: UILabel!
+	@IBOutlet weak var summaryFullTextLabel: UITextView!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -35,6 +35,7 @@ class MovieDetailViewController: UIViewController {
 		self.genreLabel.text = "Genre: " + movie.genre.capitalized
 		self.locationLabel.text = "Locations: " + movie.locations.joined(separator: ", ")
 		self.summaryFullTextLabel.text = movie.summary
+		self.title = movie.title
 	}
 	// In a storyboard-based application, you will often want to do a little preparation before navigation
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
